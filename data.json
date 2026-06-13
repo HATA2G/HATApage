@@ -1,12 +1,12 @@
 {
   "videos": [
     {
-      "title": "動画1",
-      "youtubeId": "dQw4w9WgXcQ"
+      "title": "Cumulonimbus",
+      "youtubeId": "F1D-xVzHJLhZ5ITw"
     },
     {
-      "title": "動画2",
-      "youtubeId": "別の動画のID"
+      "title": "8620",
+      "youtubeId": "kTPjAJ8LWUqNlo_w"
     }
   ],
   "illustrations": [
@@ -23,12 +23,12 @@
     {
       "title": "ワールド1",
       "image": "world1_thumb.jpg",
-      "link": "https://vrchat.com/home/launch?worldId=..."
+      "link": "https://vrchat.com/home/launch?worldId=wrld_d73f1991-f7e1-4dae-87c7-637ad3d5492f"
     },
     {
       "title": "ワールド2",
       "image": "world2_thumb.jpg",
-      "link": "https://vrchat.com/home/launch?worldId=..."
+      "link": "https://vrchat.com/home/launch?worldId=wrld_12058afa-528f-4dcf-a711-293758eddd86"
     }
   ]
 }
