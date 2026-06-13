@@ -145,22 +145,20 @@
         <p>映像、音楽、イラスト、VRChatワールドなどを作っています。</p>
     </section>
 
-    <section class="works">
+<section class="works">
         <h2>🎬 Works</h2>
         
         <h3>Video & Music</h3>
-        <div class="video-wrapper">
-            <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="YouTube video" frameborder="0" allowfullscreen></iframe>
-        </div>
+        <p style="font-size: 0.9em; color: #666;">横にスクロールできます →</p>
+        <div class="horizontal-scroll" id="video-container"></div>
 
         <h3>Illustration</h3>
         <p style="font-size: 0.9em; color: #666;">横にスクロールできます →</p>
-        <div class="horizontal-scroll">
-        </div>
+        <div class="horizontal-scroll" id="illustration-container"></div>
 
         <h3 style="margin-top: 30px;">VRChat Worlds</h3>
-        <img src="world_thumb.jpg" alt="World" style="width: 100%; border-radius: 8px; margin-bottom: 10px;" onerror="this.src='https://via.placeholder.com/800x400?text=VRChat+World'">
-        <a href="https://vrchat.com/home/launch?worldId=..." class="btn" target="_blank" rel="noopener noreferrer">Launch in VRChat</a>
+        <p style="font-size: 0.9em; color: #666;">横にスクロールできます →</p>
+        <div class="horizontal-scroll" id="vrchat-container"></div>
     </section>
 
     <section class="downloads">
@@ -194,24 +192,59 @@
     &copy; 2026 HATA
 </footer>
 <script>
-    // data.jsonを読み込む
     fetch('data.json')
         .then(response => response.json())
         .then(data => {
-            const container = document.getElementById('gallery-container');
-            
-            // 読み込んだデータ（作品の数）だけ繰り返し処理
-            data.forEach(work => {
-                // imgタグを自動で作る
+            // --- 1. 動画の追加 ---
+            const videoContainer = document.getElementById('video-container');
+            data.videos.forEach(video => {
+                const wrapper = document.createElement('div');
+                // CSSでiframeのサイズを調整するためのスタイルを直接指定
+                wrapper.style.flex = "0 0 85%";
+                wrapper.style.height = "300px";
+                wrapper.style.scrollSnapAlign = "center";
+                wrapper.style.borderRadius = "8px";
+                wrapper.style.overflow = "hidden"; // 角丸を効かせるため
+                
+                wrapper.innerHTML = `<iframe width="100%" height="100%" src="https://www.youtube.com/embed/${video.youtubeId}" title="${video.title}" frameborder="0" allowfullscreen></iframe>`;
+                videoContainer.appendChild(wrapper);
+            });
+
+            // --- 2. イラストの追加 ---
+            const illContainer = document.getElementById('illustration-container');
+            data.illustrations.forEach(work => {
                 const img = document.createElement('img');
                 img.src = work.image;
                 img.alt = work.title;
                 img.onerror = function() { this.src = 'https://via.placeholder.com/600x300?text=No+Image'; };
-                
-                // （リンクが必要な場合はここでaタグを作ってimgを囲むこともできます）
-                
-                // 画面に追加
-                container.appendChild(img);
+                illContainer.appendChild(img);
+            });
+
+            // --- 3. VRChatワールドの追加（画像＋リンク） ---
+            const vrcContainer = document.getElementById('vrchat-container');
+            data.vrchatWorlds.forEach(world => {
+                // クリックして飛べるように aタグ を作る
+                const aTag = document.createElement('a');
+                aTag.href = world.link;
+                aTag.target = "_blank"; // 別タブで開く
+                aTag.rel = "noopener noreferrer";
+                // リンクが画像と同じ形・横幅になるようにスタイル調整
+                aTag.style.flex = "0 0 85%";
+                aTag.style.display = "block";
+                aTag.style.scrollSnapAlign = "center";
+
+                const img = document.createElement('img');
+                img.src = world.image;
+                img.alt = world.title;
+                // VRCワールドの画像は aタグの子要素になるので幅100%にする
+                img.style.width = "100%"; 
+                img.style.height = "300px"; // 高さをイラストと揃える
+                img.style.objectFit = "cover";
+                img.style.borderRadius = "8px";
+                img.onerror = function() { this.src = 'https://via.placeholder.com/600x300?text=World+Image'; };
+
+                aTag.appendChild(img); // 画像をリンクで囲む
+                vrcContainer.appendChild(aTag); // リンク付き画像を枠に入れる
             });
         })
         .catch(error => console.error('データの読み込みに失敗しました:', error));
