@@ -108,15 +108,18 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 15px;
+            gap: 20px;
+            padding: 20px;
             border: 1px solid #eeeeee;
             border-radius: 8px;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
+            background-color: #fafbfc;
         }
         .download-info {
             display: flex;
             align-items: center;
             gap: 15px;
+            flex: 1;
         }
 
         /* リンク集 */
@@ -132,6 +135,17 @@
             padding: 20px;
             color: #888888;
             font-size: 0.9em;
+        }
+
+        /* スマホ用調整 */
+        @media (max-width: 500px) {
+            .download-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .download-item .btn {
+                width: 100%;
+            }
         }
     </style>
 </head>
@@ -163,17 +177,9 @@
 
     <section class="downloads">
         <h2>🎁 Downloads</h2>
-        <p>フリー素材の配布です。Google Driveのリンクへ移動します。</p>
+        <p style="margin-bottom: 20px;">フリー素材の配布です。クリックすると外部のダウンロードページ（Google Drive等）へ移動します。</p>
         
-        <div class="download-item">
-            <div class="download-info">
-                <div>
-                    <strong>UI素材セット v1.0</strong><br>
-                    <span style="font-size: 0.8em; color: #666;">UI_materials.zip</span>
-                </div>
-            </div>
-            <a href="ここにGoogleDriveの共有リンクを貼る" class="btn" target="_blank" rel="noopener noreferrer">Google Driveで開く</a>
-        </div>
+        <div id="download-container"></div>
     </section>
 
     <section class="links">
@@ -245,6 +251,26 @@
                 aTag.appendChild(img); // 画像をリンクで囲む
                 vrcContainer.appendChild(aTag); // リンク付き画像を枠に入れる
             });
+
+            // --- 4. ダウンロード素材の追加 ---
+            const downloadContainer = document.getElementById('download-container');
+            data.downloads.forEach(item => {
+                const dlItem = document.createElement('div');
+                dlItem.className = 'download-item';
+
+                dlItem.innerHTML = `
+                    <div class="download-info">
+                        <div>
+                            <strong style="font-size: 1.1em; color: #222;">${item.title}</strong>
+                            <p style="margin: 6px 0; font-size: 0.9em; color: #555;">${item.description}</p>
+                            <span style="font-size: 0.8em; color: #888; display: block;">ファイル名: ${item.fileName}</span>
+                        </div>
+                    </div>
+                    <a href="${item.link}" class="btn" target="_blank" rel="noopener noreferrer">Google Driveで開く</a>
+                `;
+                downloadContainer.appendChild(dlItem);
+            });
+        })
         })
         .catch(error => console.error('データの読み込みに失敗しました:', error));
 </script>
